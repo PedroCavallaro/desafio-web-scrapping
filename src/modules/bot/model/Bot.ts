@@ -1,6 +1,7 @@
 import puppeteer, { Page, PuppeteerNode } from 'puppeteer';
+import { IBot } from './IBot';
 
-class Bot {
+class Bot implements IBot {
   private pup: PuppeteerNode;
 
   constructor() {
