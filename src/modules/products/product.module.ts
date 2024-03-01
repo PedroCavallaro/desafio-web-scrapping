@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ProductController } from './controllers/product.controller';
 import { ProductService } from './services/product.service';
 import { Bot } from '../bot/model/Bot';
+import { DataParser } from 'src/@core/parser/DataParser';
 
 @Module({
   imports: [],
@@ -14,11 +15,15 @@ import { Bot } from '../bot/model/Bot';
       },
     },
     {
+      provide: DataParser,
+      useValue: new DataParser(),
+    },
+    {
       provide: ProductService,
-      useFactory: (bot: Bot) => {
-        return new ProductService(bot);
+      useFactory: (bot: Bot, parser: DataParser) => {
+        return new ProductService(bot, parser);
       },
-      inject: [Bot],
+      inject: [Bot, DataParser],
     },
   ],
 })

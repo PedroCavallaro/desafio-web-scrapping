@@ -11,7 +11,7 @@ export class ProductController {
   async getOi(@Param('id') id: string) {
     const res = await this.ps.getProductById(id);
 
-    return "{ a: 'oi' }";
+    return res;
   }
 
   @Get('?nutrition=:nutrition&nova=:nova&eco=:eco')

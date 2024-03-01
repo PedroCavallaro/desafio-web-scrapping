@@ -1,17 +1,20 @@
 import { load } from 'cheerio';
 import { Page } from 'puppeteer';
 import { HTMLSelectors } from 'src/@core/contants/selectors';
+import { DataParser } from 'src/@core/parser/DataParser';
 import { IBot } from 'src/modules/bot/model/IBot';
 
 export class ProductService {
   private readonly bot: IBot;
   private readonly URL: string;
   private readonly selectors: typeof HTMLSelectors;
+  private readonly dataParser: DataParser;
 
-  constructor(bot: IBot) {
+  constructor(bot: IBot, parser: DataParser) {
     this.bot = bot;
     this.URL = 'https://br.openfoodfacts.org/';
     this.selectors = HTMLSelectors;
+    this.dataParser = parser;
   }
 
   async getProductsByScore() {}
@@ -22,8 +25,8 @@ export class ProductService {
     await page.goto(`${this.URL}/produto/${id}`);
 
     const product = await this.getProductInfo(page);
-    console.log(product);
-    return 'oia';
+
+    return product;
   }
 
   async getProductInfo(page: Page) {
@@ -65,22 +68,48 @@ export class ProductService {
         };
       }),
       [...$(this.selectors.nutritionValues)].map((e) => {
+        console.log($(e).children('img').attr('src'));
         return [
           $(e).children('img').attr('src'),
           $(e).children('h4').text().trim(),
         ];
       }),
     ];
+    return this.getValuesFromSelector($);
+    // console.log(title);
+    // console.log(quantity);
+    // console.log(nova);
+    // console.log(servingSize);
+    // console.log(havePalmOil);
+    // console.log(isVegan);
+    // console.log(isVegetarian);
+    // console.log(nutrition);
+    // console.log(mappedNutritionData);
+    // console.log(nutritionValues);
+  }
+  getValuesFromSelector($: cheerio.Root) {
+    const nutritionTitle = $(this.selectors.nutrition).text().trim();
+    const nutritionValues = [...$(this.selectors.nutritionValues)];
+    const nutritionTable = [...$(this.selectors.data)];
 
-    console.log(title);
-    console.log(quantity);
-    console.log(nova);
-    console.log(servingSize);
-    console.log(havePalmOil);
-    console.log(isVegan);
-    console.log(isVegetarian);
-    console.log(nutrition);
-    console.log(mappedNutritionData);
-    console.log(nutritionValues);
+    const data = this.dataParser.formatNutritionTableData(nutritionTable, $);
+
+    console.log(data);
+
+    return {
+      title: $(this.selectors.name).text(),
+      quantity: $(this.selectors.quantity).text(),
+      nova: this.dataParser.formatClassificationScore(
+        'nova',
+        $(this.selectors.nova).text().trim(),
+      ),
+      nutrition: this.dataParser.formatClassificationScore(
+        'nutri',
+        nutritionTitle,
+        nutritionValues,
+        $,
+      ),
+      data: Object.fromEntries(data),
+    };
   }
 }
