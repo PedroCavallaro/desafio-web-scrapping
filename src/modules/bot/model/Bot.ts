@@ -9,7 +9,7 @@ class Bot implements IBot {
   }
   async launch(): Promise<Page> {
     const browser = await this.pup.launch({ headless: true });
-    const page = await browser.newPage();
+    const page = browser.newPage();
 
     return page;
   }
