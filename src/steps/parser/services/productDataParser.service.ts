@@ -14,8 +14,9 @@ import {
   nutritionLevelMap,
   NutritionLevel,
 } from 'src/helpers/contants/nutritionLevelMap';
-import { ProductDataParser } from './ProductDataParser';
-import { Nutrition } from '../scrapper/model/Nutrition';
+import { Nutrition } from '../../scrapper/model/Nutrition';
+import { ProductDataParser } from '../model/ProductDataParser';
+import { Product } from 'src/steps/scrapper/model/Product';
 
 export class ProductDataParserService implements ProductDataParser {
   formatIngredients(ingredients: string) {
@@ -56,16 +57,16 @@ export class ProductDataParserService implements ProductDataParser {
 
     return {
       id,
-      name,
-      nutrition: {
-        score: nutriScore,
-        title: nutriTitle,
-      },
+      title: name,
       nova: {
         score: novaScore,
         title: novaTitle,
       },
-    };
+      nutri: {
+        score: nutriScore,
+        title: nutriTitle,
+      },
+    } as Pick<Product, 'id' | 'title' | 'nova' | 'nutri'>;
   }
   getKeyByValue<T>(object: T, value: string) {
     return Object.keys(object).find((key) => object[key] === value);

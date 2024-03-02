@@ -4,8 +4,8 @@ import { Page } from 'puppeteer';
 import { productAttributes } from 'src/helpers/contants/selectors';
 import { FilterProductsDTO } from 'src/helpers/dtos/FilterProductsDTO';
 import { IBot } from 'src/steps/bot/model/IBot';
-import { Filter } from 'src/steps/filter/Filter';
-import { ProductDataParser } from 'src/steps/parser/ProductDataParser';
+import { Filter } from 'src/steps/filter/model/Filter';
+import { ProductDataParser } from 'src/steps/parser/model/ProductDataParser';
 import { Product } from '../model/Product';
 import { Result } from 'src/helpers/result/Result';
 

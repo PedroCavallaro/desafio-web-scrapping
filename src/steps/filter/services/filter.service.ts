@@ -1,5 +1,5 @@
 import cheerio from 'cheerio';
-import { Filter } from './Filter';
+import { Filter } from '../model/Filter';
 
 export class FilterService implements Filter {
   filterByNovaAndNutri(
