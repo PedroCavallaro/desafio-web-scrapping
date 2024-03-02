@@ -12,7 +12,7 @@
 </ul>
 
 <h1>Como rodar</h1>
-
+<p>Configurei esse comando para instalar as dependências e rodas o projeto</p>
 ```
 npm run prod
 ````
