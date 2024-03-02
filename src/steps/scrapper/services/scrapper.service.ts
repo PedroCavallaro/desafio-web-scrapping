@@ -7,6 +7,7 @@ import { IBot } from 'src/steps/bot/model/IBot';
 import { Filter } from 'src/steps/filter/Filter';
 import { ProductDataParser } from 'src/steps/parser/ProductDataParser';
 import { Product } from '../model/Product';
+import { Result } from 'src/helpers/result/Result';
 
 export class ScrapperService {
   private readonly URL: string;
@@ -40,7 +41,7 @@ export class ScrapperService {
       }, $)
       .map((e) => this.dataParser.mapProductCardArray($, e));
 
-    return filter;
+    return Result.ok(filter);
   }
 
   async getProductById(id: string) {
@@ -50,29 +51,39 @@ export class ScrapperService {
       waitUntil: 'domcontentloaded',
     });
 
-    const { title, nutrition, nova, quantity, servingSize, data, ingredients } =
-      await this.getProduct();
+    const result = await this.getProductFromPage();
 
-    return new Product(
-      undefined,
-      title,
-      nova,
-      nutrition,
-      quantity,
-      servingSize,
-      ingredients,
-      data,
+    if (result.error) return Result.fail(result.error);
+
+    const product = await this.getProductFromPage();
+    const { title, nutri, nova, quantity, servingSize, data, ingredients } =
+      product.getValue() as Product;
+
+    return Result.ok(
+      new Product(
+        undefined,
+        title,
+        nova,
+        nutri,
+        quantity,
+        servingSize,
+        ingredients,
+        data,
+      ),
     );
   }
 
-  async getProduct() {
+  async getProductFromPage() {
     const html = await this.page.evaluate(
       () => document.documentElement.innerHTML,
     );
 
     const $ = load(html);
+    const error = $(this.selectors.error).text();
 
-    return this.getFormatedValuesFromSelectors($);
+    if (error) return Result.fail(error);
+
+    return Result.ok(this.getFormatedValuesFromSelectors($));
   }
   getFormatedValuesFromSelectors($: CheerioAPI) {
     const nutritionTitle = $(this.selectors.nutrition).text().trim();
@@ -94,7 +105,7 @@ export class ScrapperService {
         'nova',
         $(this.selectors.nova).text().trim(),
       ),
-      nutrition: this.dataParser.formatClassificationScore(
+      nutri: this.dataParser.formatClassificationScore(
         'nutri',
         nutritionTitle,
         nutritionValues,

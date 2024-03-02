@@ -16,6 +16,7 @@ import {
 } from 'src/helpers/contants/nutritionLevelMap';
 import { ProductDataParser } from './ProductDataParser';
 import { Product } from '../scrapper/model/Product';
+import { Nutrition } from '../scrapper/model/Nutrition';
 
 export class ProductDataParserService implements ProductDataParser {
   formatIngredients(ingredients: string) {
@@ -119,17 +120,14 @@ export class ProductDataParserService implements ProductDataParser {
       const imgSrc = $(e).children('img').attr('src');
 
       return [
-        this.mapAttributes<typeof nutritionLevelMap>(
-          nutritionLevelMap,
-          imgSrc as NutritionLevel,
-        ),
+        this.mapAttributes(nutritionLevelMap, imgSrc as NutritionLevel),
         $(e).children('h4').text().trim(),
       ];
     });
   }
 
   formatNutritionTableData(values: cheerio.Element[], $: cheerio.CheerioAPI) {
-    const mappedData = new Map();
+    const mappedData = new Map<string, Nutrition>();
 
     values.forEach((e) => {
       const item = $(e).children('td:nth-child(1)').text().trim();
@@ -137,8 +135,8 @@ export class ProductDataParserService implements ProductDataParser {
       const perServing = $(e).children('td:nth-child(3)').text().trim();
 
       mappedData.set(item, {
-        per100g: this.hasValue(per100g),
-        perServing: this.hasValue(perServing),
+        per100g: this.hasValue(per100g) as string,
+        perServing: this.hasValue(perServing) as string,
       });
     });
 

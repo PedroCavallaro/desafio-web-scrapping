@@ -17,6 +17,6 @@ export const productAttributes = {
   isVegetarian:
     '#panel_ingredients_analysis_content:nth-child(8) > ul > li  > a > img ',
   data: "[aria-label='Dados nutricionais'] > tbody > tr",
-
   card: '.list_product_a',
+  error: '.if-empty-dnone ~ p',
 };

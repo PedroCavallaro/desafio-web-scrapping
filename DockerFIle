@@ -1,5 +1,5 @@
 FROM node
-FROM ghcr.io/puppeteer/puppeteer:20.5.0
+FROM ghcr.io/puppeteer/puppeteer:22.3.0
 
 WORKDIR /usr/src/scrap
 RUN chown -Rh $user:$user /usr/src/scrap
