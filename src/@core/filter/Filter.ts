@@ -1,3 +1,4 @@
+// @ts-ignore wihtout ts-ignore, it will error on docker build
 import { AnyNode, CheerioAPI } from 'cheerio';
 
 export class Filter {

@@ -1,3 +1,4 @@
+// @ts-ignore wihtout ts-ignore, it will error on docker build
 import { load, CheerioAPI } from 'cheerio';
 import { Page } from 'puppeteer';
 import { productAttributes } from 'src/@core/contants/selectors';
@@ -7,25 +8,25 @@ import { DataParser } from 'src/@core/parser/DataParser';
 import { IBot } from 'src/modules/bot/model/IBot';
 
 export class ProductService {
-  private readonly bot: IBot;
   private readonly URL: string;
   private readonly selectors: typeof productAttributes;
   private readonly dataParser: DataParser;
   private readonly filter: Filter;
+  private page: Page;
 
   constructor(bot: IBot, parser: DataParser, filter: Filter) {
-    this.bot = bot;
     this.URL = 'https://br.openfoodfacts.org/';
     this.selectors = productAttributes;
     this.dataParser = parser;
     this.filter = filter;
+    bot.launch().then((page) => (this.page = page));
   }
 
   async getProductsByScore({ nova, nutrition }: FilterProductsDTO) {
-    const page = await this.bot.launch();
-
-    await page.goto(this.URL);
-    const html = await page.evaluate(() => document.documentElement.innerHTML);
+    await this.page.goto(this.URL);
+    const html = await this.page.evaluate(
+      () => document.documentElement.innerHTML,
+    );
 
     const $ = load(html);
 
@@ -40,17 +41,18 @@ export class ProductService {
 
   async getProductById(id: string) {
     console.log(`Iniciando scrapping para o produto de id: ${id}`);
-    const page = await this.bot.launch();
 
-    await page.goto(`${this.URL}/produto/${id}`);
+    await this.page.goto(`${this.URL}/produto/${id}`);
 
-    const product = await this.getProduct(page);
+    const product = await this.getProduct();
 
     return product;
   }
 
-  async getProduct(page: Page) {
-    const html = await page.evaluate(() => document.documentElement.innerHTML);
+  async getProduct() {
+    const html = await this.page.evaluate(
+      () => document.documentElement.innerHTML,
+    );
 
     const $ = load(html);
 

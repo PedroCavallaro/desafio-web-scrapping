@@ -9,24 +9,14 @@ import {
   NutritionLevel,
   nutritionLevelMap,
 } from '../contants/nutritionLevelMap';
+// @ts-ignore wihtout ts-ignore, it will error on docker build
 import { AnyNode, CheerioAPI } from 'cheerio';
 export class DataParser {
   formatIngredients = (ingredients: string) => {
     if (this.hasValue(ingredients)) {
       const ingredientsArray = String(ingredients)
-        .trim()
-        .replace(/[:;]/g, ',')
-        .replace(/<span class="allergen">/g, '')
-        .replace(/<\/span>/g, '')
-        .replace(/<strong>/g, '')
-        .replace(/<\/strong>/g, '')
-        .replace(
-          /<!-- text is in a different language than the interface -->/g,
-          '',
-        )
-        .split('\n')
-        .join()
-        .split(',');
+        .replace(/\s*[:;,]\s*/g, ',')
+        .split('\n');
 
       return ingredientsArray
         .filter((e) => e.trim() !== '')

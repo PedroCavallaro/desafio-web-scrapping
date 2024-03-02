@@ -1,11 +1,14 @@
-FROM node:alphine
+FROM node
+FROM ghcr.io/puppeteer/puppeteer:20.5.0
 
-WORKDIR /src/api
+WORKDIR /usr/src/scrap
+RUN chown -Rh $user:$user /usr/src/scrap
+USER $user
 
 COPY . .
 
 RUN npm install 
-
+RUN npm install @types/cheerio
 RUN npm run build
 
-CMD ["npm","run", "start:prod"]
+CMD ["npm", "run", "start:prod"]

@@ -10,6 +10,7 @@ export class ProductController {
 
   @Get('/:id')
   async getOi(@Param('id') id: string) {
+    console.log('a');
     const res = await this.ps.getProductById(id);
 
     return res;
