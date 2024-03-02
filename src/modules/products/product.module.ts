@@ -3,6 +3,7 @@ import { ProductController } from './controllers/product.controller';
 import { ProductService } from './services/product.service';
 import { Bot } from '../bot/model/Bot';
 import { DataParser } from 'src/@core/parser/DataParser';
+import { Filter } from 'src/@core/filter/Filter';
 
 @Module({
   imports: [],
@@ -15,15 +16,19 @@ import { DataParser } from 'src/@core/parser/DataParser';
       },
     },
     {
+      provide: Filter,
+      useValue: new Filter(),
+    },
+    {
       provide: DataParser,
       useValue: new DataParser(),
     },
     {
       provide: ProductService,
-      useFactory: (bot: Bot, parser: DataParser) => {
-        return new ProductService(bot, parser);
+      useFactory: (bot: Bot, parser: DataParser, filter: Filter) => {
+        return new ProductService(bot, parser, filter);
       },
-      inject: [Bot, DataParser],
+      inject: [Bot, DataParser, Filter],
     },
   ],
 })

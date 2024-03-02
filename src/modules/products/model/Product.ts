@@ -3,7 +3,7 @@ import { Classification } from './Classification';
 import { Nutrition } from './Nutrition';
 
 export class Product {
-  id: string;
+  id?: string;
   name: string;
   classification: Classification;
   ingredients?: Ingredients;

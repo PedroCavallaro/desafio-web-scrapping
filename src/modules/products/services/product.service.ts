@@ -1,103 +1,76 @@
-import { load } from 'cheerio';
+import { load, CheerioAPI } from 'cheerio';
 import { Page } from 'puppeteer';
-import { HTMLSelectors } from 'src/@core/contants/selectors';
+import { productAttributes } from 'src/@core/contants/selectors';
+import { FilterProductsDTO } from 'src/@core/dtos/FilterProductsDTO';
+import { Filter } from 'src/@core/filter/Filter';
 import { DataParser } from 'src/@core/parser/DataParser';
 import { IBot } from 'src/modules/bot/model/IBot';
 
 export class ProductService {
   private readonly bot: IBot;
   private readonly URL: string;
-  private readonly selectors: typeof HTMLSelectors;
+  private readonly selectors: typeof productAttributes;
   private readonly dataParser: DataParser;
+  private readonly filter: Filter;
 
-  constructor(bot: IBot, parser: DataParser) {
+  constructor(bot: IBot, parser: DataParser, filter: Filter) {
     this.bot = bot;
     this.URL = 'https://br.openfoodfacts.org/';
-    this.selectors = HTMLSelectors;
+    this.selectors = productAttributes;
     this.dataParser = parser;
+    this.filter = filter;
   }
 
-  async getProductsByScore() {}
+  async getProductsByScore({ nova, nutrition }: FilterProductsDTO) {
+    const page = await this.bot.launch();
+
+    await page.goto(this.URL);
+    const html = await page.evaluate(() => document.documentElement.innerHTML);
+
+    const $ = load(html);
+
+    const filter = [...$(this.selectors.card)]
+      .filter((e) => {
+        return this.filter.filterByNovaAndNutri(nova, nutrition, e, $);
+      }, $)
+      .map((e) => this.dataParser.mapProductCardArray($, e));
+
+    console.log(filter);
+  }
+
   async getProductById(id: string) {
     console.log(`Iniciando scrapping para o produto de id: ${id}`);
     const page = await this.bot.launch();
 
     await page.goto(`${this.URL}/produto/${id}`);
 
-    const product = await this.getProductInfo(page);
+    const product = await this.getProduct(page);
 
     return product;
   }
 
-  async getProductInfo(page: Page) {
+  async getProduct(page: Page) {
     const html = await page.evaluate(() => document.documentElement.innerHTML);
 
     const $ = load(html);
-    const initialNutritionData = {};
-    const [
-      title,
-      quantity,
-      nova,
-      nutrition,
-      servingSize,
-      havePalmOil,
-      isVegan,
-      isVegetarian,
-      mappedNutritionData,
-      nutritionValues,
-    ] = [
-      $(this.selectors.name).text(),
-      $(this.selectors.quantity).text(),
-      $(this.selectors.nova).text().trim(),
-      $(this.selectors.nutrition).text().trim(),
-      $(this.selectors.servingSize)
-        .text()
-        .trim()
-        .replace(/Como vendidopor porção \(/g, '')
-        .slice(0, 3),
-      $(this.selectors.havePalmOil).text().trim(),
-      $(this.selectors.isVegan).text().trim(),
-      $(this.selectors.isVegetarian).text().trim(),
-      [...$(this.selectors.data)].map((e) => {
-        return {
-          ...initialNutritionData,
-          [$(e).children('td:nth-child(1)').text().trim()]: {
-            per100g: $(e).children('td:nth-child(2)').text().trim(),
-            perServing: $(e).children('td:nth-child(3)').text().trim(),
-          },
-        };
-      }),
-      [...$(this.selectors.nutritionValues)].map((e) => {
-        console.log($(e).children('img').attr('src'));
-        return [
-          $(e).children('img').attr('src'),
-          $(e).children('h4').text().trim(),
-        ];
-      }),
-    ];
-    return this.getValuesFromSelector($);
-    // console.log(title);
-    // console.log(quantity);
-    // console.log(nova);
-    // console.log(servingSize);
-    // console.log(havePalmOil);
-    // console.log(isVegan);
-    // console.log(isVegetarian);
-    // console.log(nutrition);
-    // console.log(mappedNutritionData);
-    // console.log(nutritionValues);
+
+    return this.getFormatedValuesFromSelectors($);
   }
-  getValuesFromSelector($: cheerio.Root) {
+  getFormatedValuesFromSelectors($: CheerioAPI) {
     const nutritionTitle = $(this.selectors.nutrition).text().trim();
     const nutritionValues = [...$(this.selectors.nutritionValues)];
     const nutritionTable = [...$(this.selectors.data)];
 
     const data = this.dataParser.formatNutritionTableData(nutritionTable, $);
 
-    console.log(data);
+    const ingredients = this.dataParser.formatIngredientsAnalysis(
+      [...$(this.selectors.analisys)],
+      $(this.selectors.ingredients).text(),
+      $,
+    );
 
     return {
-      title: $(this.selectors.name).text(),
+      title: $(this.selectors.title).text(),
       quantity: $(this.selectors.quantity).text(),
       nova: this.dataParser.formatClassificationScore(
         'nova',
@@ -109,7 +82,11 @@ export class ProductService {
         nutritionValues,
         $,
       ),
+      servingSize: this.dataParser.formatServingSize(
+        $(this.selectors.servingSize).text(),
+      ),
       data: Object.fromEntries(data),
+      ingredients,
     };
   }
 }

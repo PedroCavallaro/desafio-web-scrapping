@@ -1,6 +1,7 @@
-import { Controller, Get, Inject, Param, Req } from '@nestjs/common';
+import { Controller, Get, Inject, Param, Query } from '@nestjs/common';
 import { ProductService } from '../services/product.service';
-import { Request } from 'express';
+import { FilterProductsDTO } from 'src/@core/dtos/FilterProductsDTO';
+import { ApiQuery } from '@nestjs/swagger';
 
 @Controller('products')
 export class ProductController {
@@ -14,14 +15,10 @@ export class ProductController {
     return res;
   }
 
-  @Get('?nutrition=:nutrition&nova=:nova&eco=:eco')
-  getByNutrition(
-    @Param('nutrition') nutrition: string,
-    @Param('nova') nova: string,
-    @Param('eco') eco: string,
-  ) {
-    console.log(nutrition);
-    console.log(nova);
-    console.log(eco);
+  @Get()
+  @ApiQuery({ name: 'nova' })
+  @ApiQuery({ name: 'nutrition' })
+  async getByNutrition(@Query() query: FilterProductsDTO) {
+    await this.ps.getProductsByScore(query);
   }
 }
