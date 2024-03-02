@@ -1,18 +1,23 @@
 FROM node
-FROM ghcr.io/puppeteer/puppeteer:22.3.0
 
+RUN apt-get update && apt-get install gnupg wget -y && \
+  wget --quiet --output-document=- https://dl-ssl.google.com/linux/linux_signing_key.pub | gpg --dearmor > /etc/apt/trusted.gpg.d/google-archive.gpg && \
+  sh -c 'echo "deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list' && \
+  apt-get update && \
+  apt-get install google-chrome-stable -y --no-install-recommends && \
+  rm -rf /var/lib/apt/lists/*
+
+WORKDIR /usr/src/scrap
+RUN chown -Rh $user:$user /usr/src/scrap
+USER $user
 
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
     PUPPETEER_EXECUTABLE_PATH=/usr/bin/google-chrome-stable
 
-
-WORKDIR /usr/src/scrap
-
-
 COPY . .
 
 RUN npm install 
-RUN npm install @types/cheerio
+
 RUN npm run build
 
 CMD ["npm", "run", "start:prod"]

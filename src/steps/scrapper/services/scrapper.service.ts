@@ -28,7 +28,9 @@ export class ScrapperService {
     console.log(
       `Filtrando produtos por Nova:${nova} e Nutri-Score:${nutrition}`,
     );
-    await this.page.goto(this.URL);
+    await this.page.goto(this.URL, {
+      waitUntil: 'domcontentloaded',
+    });
     const html = await this.page.evaluate(
       () => document.documentElement.innerHTML,
     );
