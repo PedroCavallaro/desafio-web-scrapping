@@ -10,3 +10,9 @@
 </ul>
 
 <h1>Código<h1>
+
+<h1>Desafios</h1>
+<ul>
+  <li>Performance: quando começei a testar o código, percebi que estava levando cerca de 12 segundos para uma resposta, e que boa parte desse tempo era para o puppeter abrir. Para resolver isso decidi fazer um cache da mesma página, e aplicar a configuração  { waitUntil: 'domcontentloaded'}, desta forma o tempo da primeira requisição fica em torno de 5 segundos, e das próximas entre 1 a 2 segundos</li>
+  
+</ul>
