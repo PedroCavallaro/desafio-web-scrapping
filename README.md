@@ -176,7 +176,7 @@ curl --location "http://localhost:3000/products/3046920010603"
         </ul>
     </ul>
   </ol>
-    <h4>1. parseNutritionValues(values: cheerio.Element[], $: cheerio.CheerioAPI): NutritionValue[][]</h4>
+    <h4>7. parseNutritionValues(values: cheerio.Element[], $: cheerio.CheerioAPI): NutritionValue[][]</h4>
   <p>Este método analisa as informações nutricionais de um array de elementos Cheerio e retorna um array de arrays, onde cada array interno contém o nível de nutrição e o valor de texto correspondente.</p>
   <h4>Passos:</h4>
   <ol>
@@ -193,7 +193,7 @@ curl --location "http://localhost:3000/products/3046920010603"
         </ul>
     </ul>
   </ol>
-  <h4>2. mapAttributes<T>(map: T, attribute: keyof T): T[attribute]</h4>
+  <h4>8. mapAttributes<T>(map: T, attribute: keyof T): T[attribute]</h4>
   <p>Este método genérico recupera um valor de atributo específico de um mapa fornecido.</p>
   <h4>Passos:</h4>
   <ol>
@@ -204,7 +204,7 @@ curl --location "http://localhost:3000/products/3046920010603"
       </ul>
     <li>Retorna o valor associado à chave <code>attribute</code> especificada no objeto <code>map</code>.</li>
   </ol>
-  <h4>3. hasValue(value: string | Array<string>): string | Array<string> | '?'</h4>
+  <h4>9. hasValue(value: string | Array<string>): string | Array<string> | '?'</h4>
   <p>Este método verifica se um determinado valor representa uma string vazia ou um array vazio.</p>
   <h4>Passos:</h4>
   <ol>
@@ -221,7 +221,7 @@ curl --location "http://localhost:3000/products/3046920010603"
         </ul>
       </ul>
   </ol>
-    <h4>4. formatNutritionTableData(values: cheerio.Element[], $: cheerio.CheerioAPI): Map<string, Nutrition></h4>
+    <h4>10. formatNutritionTableData(values: cheerio.Element[], $: cheerio.CheerioAPI): Map<string, Nutrition></h4>
 <p>Este método analisa um array de elementos Cheerio que representam dados nutricionais em formato de tabela e retorna um Map de informações nutricionais.</p>
 <h4>Passos:</h4>
 <ol>
