@@ -1,6 +1,6 @@
 export class Ingredients {
   isVegan: boolean | 'unknown';
-  hasPalmOil: boolean | 'unknown';
+  hasPalmOil: string | string[];
   isVegetarian: boolean | 'unknown';
-  list: Array<string>;
+  list: string | string[];
 }

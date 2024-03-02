@@ -2,6 +2,7 @@ import cheerio from 'cheerio';
 import { Product } from '../scrapper/model/Product';
 import { Classification } from '../scrapper/model/Classification';
 import { Nutrition } from '../scrapper/model/Nutrition';
+import { Ingredients } from '../scrapper/model/Ingredients';
 export interface ProductDataParser {
   formatIngredients(ingredients: string): string[] | 'Dado não encontrado';
 
@@ -15,12 +16,7 @@ export interface ProductDataParser {
     analisys: cheerio.Element[],
     ingredients: string,
     $: cheerio.CheerioAPI,
-  ): {
-    havePalmOil: any;
-    isVegan: any;
-    isVegetarian: any;
-    list: string | string[];
-  };
+  ): Ingredients;
 
   formatClassificationScore(
     type: 'nova' | 'nutri',

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ScrapperService } from './services/scrapper.service';
 import { Bot } from '../bot/model/Bot';
-import { FilterService } from '../filter/Filter.service';
+import { FilterService } from '../filter/filter.service';
 import { ProductDataParserService } from '../parser/productDataParser.service';
 import { ScrapperController } from './scrapper.controller';
 

@@ -6,6 +6,7 @@ import { FilterProductsDTO } from 'src/helpers/dtos/FilterProductsDTO';
 import { IBot } from 'src/steps/bot/model/IBot';
 import { Filter } from 'src/steps/filter/Filter';
 import { ProductDataParser } from 'src/steps/parser/ProductDataParser';
+import { Product } from '../model/Product';
 
 export class ScrapperService {
   private readonly URL: string;
@@ -49,9 +50,19 @@ export class ScrapperService {
       waitUntil: 'domcontentloaded',
     });
 
-    const product = await this.getProduct();
+    const { title, nutrition, nova, quantity, servingSize, data, ingredients } =
+      await this.getProduct();
 
-    return product;
+    return new Product(
+      undefined,
+      title,
+      nova,
+      nutrition,
+      quantity,
+      servingSize,
+      ingredients,
+      data,
+    );
   }
 
   async getProduct() {

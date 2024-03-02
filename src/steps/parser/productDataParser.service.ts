@@ -83,9 +83,9 @@ export class ProductDataParserService implements ProductDataParser {
     $: cheerio.CheerioAPI,
   ) {
     return {
-      havePalmOil: ingredientsAnalysisMap[$(analisys[0]).attr('class')],
-      isVegan: ingredientsAnalysisMap[$(analisys[1]).attr('class')],
-      isVegetarian: ingredientsAnalysisMap[$(analisys[2]).attr('class')],
+      hasPalmOil: ingredientsAnalysisMap[$(analisys[0]).attr('class')],
+      isVegan: !ingredientsAnalysisMap[$(analisys[1]).attr('class')],
+      isVegetarian: !ingredientsAnalysisMap[$(analisys[2]).attr('class')],
       list: this.formatIngredients(ingredients),
     };
   }
