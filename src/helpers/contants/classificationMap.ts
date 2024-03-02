@@ -24,7 +24,7 @@ export const novaScoreMapByText = {
   'Alimentos ultra-processados': '4',
   'Nível desconhecido de processamento do alimento': 'Dado não encontrado',
 };
-export type NovaText = keyof typeof nutriScoreMapByText;
+export type NovaText = keyof typeof novaScoreMapByText;
 
 export const novaScoreMap = {
   '1': 'Alimentos não processados ​​ou minimamente processados',
@@ -32,4 +32,4 @@ export const novaScoreMap = {
   '3': 'Ingredientes culinários processados',
   '4': 'Alimentos ultra-processados',
 };
-export type NovaClassification = keyof typeof nutriScoreMap;
+export type NovaClassification = keyof typeof novaScoreMap;

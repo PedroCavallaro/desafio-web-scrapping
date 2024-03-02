@@ -1,18 +1,18 @@
 import { Controller, Get, Inject, Param, Query } from '@nestjs/common';
-import { ProductService } from '../services/product.service';
-import { FilterProductsDTO } from 'src/@core/dtos/FilterProductsDTO';
 import { ApiQuery, ApiTags } from '@nestjs/swagger';
+import { FilterProductsDTO } from 'src/helpers/dtos/FilterProductsDTO';
+import { ScrapperService } from './services/scrapper.service';
 
 @ApiTags('Produtos')
 @Controller('products')
-export class ProductController {
-  @Inject(ProductService)
-  private readonly ps: ProductService;
+export class ScrapperController {
+  @Inject(ScrapperService)
+  private readonly scrapper: ScrapperService;
 
   @Get('/:id')
   async getOi(@Param('id') id: string) {
     console.log('a');
-    const res = await this.ps.getProductById(id);
+    const res = await this.scrapper.getProductById(id);
 
     return res;
   }
@@ -21,6 +21,6 @@ export class ProductController {
   @ApiQuery({ name: 'nova' })
   @ApiQuery({ name: 'nutrition' })
   async getByNutrition(@Query() query: FilterProductsDTO) {
-    await this.ps.getProductsByScore(query);
+    await this.scrapper.getProductsByScore(query);
   }
 }

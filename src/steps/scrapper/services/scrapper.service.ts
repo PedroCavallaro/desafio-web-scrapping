@@ -1,20 +1,21 @@
 // @ts-ignore wihtout ts-ignore, it will error on docker build
 import { load, CheerioAPI } from 'cheerio';
 import { Page } from 'puppeteer';
-import { productAttributes } from 'src/@core/contants/selectors';
-import { FilterProductsDTO } from 'src/@core/dtos/FilterProductsDTO';
-import { Filter } from 'src/@core/filter/Filter';
-import { DataParser } from 'src/@core/parser/DataParser';
-import { IBot } from 'src/modules/bot/model/IBot';
+import { productAttributes } from 'src/helpers/contants/selectors';
+import { FilterProductsDTO } from 'src/helpers/dtos/FilterProductsDTO';
+import { IBot } from 'src/steps/bot/model/IBot';
+import { Filter } from 'src/steps/filter/Filter';
+import { IProductDataParser } from 'src/steps/parser/IProductDataParser';
+import { ProductDataParser } from 'src/steps/parser/productDataParser.service';
 
-export class ProductService {
+export class ScrapperService {
   private readonly URL: string;
   private readonly selectors: typeof productAttributes;
-  private readonly dataParser: DataParser;
+  private readonly dataParser: IProductDataParser;
   private readonly filter: Filter;
   private page: Page;
 
-  constructor(bot: IBot, parser: DataParser, filter: Filter) {
+  constructor(bot: IBot, parser: ProductDataParser, filter: Filter) {
     this.URL = 'https://br.openfoodfacts.org/';
     this.selectors = productAttributes;
     this.dataParser = parser;

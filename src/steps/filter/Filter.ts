@@ -1,7 +1,8 @@
 // @ts-ignore wihtout ts-ignore, it will error on docker build
 import { AnyNode, CheerioAPI } from 'cheerio';
+import { IFilter } from './IFilter';
 
-export class Filter {
+export class Filter implements IFilter {
   filterByNovaAndNutri(
     desiredNova: string,
     desiredNutri: string,

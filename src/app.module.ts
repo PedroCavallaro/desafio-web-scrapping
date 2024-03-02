@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
-import { ProductModule } from './modules/products/product.module';
+import { ScrapperModule } from './steps/scrapper/scrapper.module';
 
 @Module({
-  imports: [ProductModule],
+  imports: [ScrapperModule],
   controllers: [],
   providers: [],
 })

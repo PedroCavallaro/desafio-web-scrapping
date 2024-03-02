@@ -1,18 +1,22 @@
 import {
+  NovaClassification,
+  NovaText,
+  NutritionClassification,
+  NutritionText,
   novaScoreMap,
   novaScoreMapByText,
   nutriScoreMap,
   nutriScoreMapByText,
-} from '../contants/classificationMap';
-import { ingredientsAnalysisMap } from '../contants/ingredientsAnalysisMap';
+} from 'src/helpers/contants/classificationMap';
+import cheerio from 'cheerio';
+import { ingredientsAnalysisMap } from 'src/helpers/contants/ingredientsAnalysisMap';
 import {
-  NutritionLevel,
   nutritionLevelMap,
-} from '../contants/nutritionLevelMap';
-// @ts-ignore wihtout ts-ignore, it will error on docker build
-import { AnyNode, CheerioAPI } from 'cheerio';
-export class DataParser {
-  formatIngredients = (ingredients: string) => {
+  NutritionLevel,
+} from 'src/helpers/contants/nutritionLevelMap';
+import { IProductDataParser } from './IProductDataParser';
+export class ProductDataParser implements IProductDataParser {
+  formatIngredients(ingredients: string) {
     if (this.hasValue(ingredients)) {
       const ingredientsArray = String(ingredients)
         .replace(/<\s*[:;,]\s*/g, ',')
@@ -23,8 +27,8 @@ export class DataParser {
         .map((e) => e.trim());
     }
     return 'Dado não encontrado';
-  };
-  mapProductCardArray($: CheerioAPI, e: AnyNode) {
+  }
+  mapProductCardArray($: cheerio.Root, e: cheerio.Element) {
     const route = $(e).attr('href').split('/');
     const id = route[4];
     const name = $(e).find('.list_product_name').text();
@@ -37,18 +41,17 @@ export class DataParser {
 
     const nutriTitle = this.mapAttributes(
       nutriScoreMap,
-      nutri[12].toUpperCase() as keyof typeof nutriScoreMap,
+      nutri[12].toUpperCase() as NutritionClassification,
     );
 
     const novaTitle = this.mapAttributes(
       novaScoreMap,
-      nova[5] as keyof typeof novaScoreMap,
+      nova[5] as NovaClassification,
     );
 
     const novaScore = this.getKeyByValue(novaScoreMap, novaTitle);
     const nutriScore = this.getKeyByValue(nutriScoreMap, nutriTitle);
-    console.log(novaScore);
-    console.log(nutriScore);
+
     return {
       id,
       name,
@@ -79,9 +82,9 @@ export class DataParser {
     return servingSize;
   }
   formatIngredientsAnalysis(
-    analisys: AnyNode[],
+    analisys: cheerio.Element[],
     ingredients: string,
-    $: CheerioAPI,
+    $: cheerio.CheerioAPI,
   ) {
     return {
       havePalmOil: ingredientsAnalysisMap[$(analisys[0]).attr('class')],
@@ -94,26 +97,20 @@ export class DataParser {
   formatClassificationScore(
     type: 'nova' | 'nutri',
     title?: string,
-    values?: AnyNode[],
-    $?: CheerioAPI,
+    values?: cheerio.Element[],
+    $?: cheerio.CheerioAPI,
   ) {
     let score = '';
 
     if (type === 'nova') {
-      score = this.mapAttributes<typeof novaScoreMapByText>(
-        novaScoreMapByText,
-        title as keyof typeof novaScoreMapByText,
-      );
+      score = this.mapAttributes(novaScoreMapByText, title as NovaText);
       return {
         score,
         title,
       };
     }
 
-    score = this.mapAttributes<typeof nutriScoreMapByText>(
-      nutriScoreMapByText,
-      title as keyof typeof nutriScoreMapByText,
-    );
+    score = this.mapAttributes(nutriScoreMapByText, title as NutritionText);
 
     return {
       score,
@@ -121,7 +118,7 @@ export class DataParser {
     };
   }
 
-  parseNutritionValues(values: AnyNode[], $: CheerioAPI) {
+  parseNutritionValues(values: cheerio.Element[], $: cheerio.CheerioAPI) {
     return values.map((e) => {
       const imgSrc = $(e).children('img').attr('src');
 
@@ -135,7 +132,7 @@ export class DataParser {
     });
   }
 
-  formatNutritionTableData(values: AnyNode[], $: CheerioAPI) {
+  formatNutritionTableData(values: cheerio.Element[], $: cheerio.CheerioAPI) {
     const mappedData = new Map();
 
     values.forEach((e) => {
@@ -161,9 +158,5 @@ export class DataParser {
       return '?';
     }
     return value;
-  }
-
-  removeSpaces(string: string) {
-    return string.trim();
   }
 }
