@@ -1,5 +1,5 @@
 import cheerio from 'cheerio';
-export interface IProductDataParser {
+export interface ProductDataParser {
   formatIngredients(ingredients: string): string[] | 'Dado não encontrado';
   mapProductCardArray(
     $: cheerio.Root,

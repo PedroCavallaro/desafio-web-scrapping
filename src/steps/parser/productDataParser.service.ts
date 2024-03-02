@@ -14,8 +14,9 @@ import {
   nutritionLevelMap,
   NutritionLevel,
 } from 'src/helpers/contants/nutritionLevelMap';
-import { IProductDataParser } from './IProductDataParser';
-export class ProductDataParser implements IProductDataParser {
+import { ProductDataParser } from './ProductDataParser';
+
+export class ProductDataParserService implements ProductDataParser {
   formatIngredients(ingredients: string) {
     if (this.hasValue(ingredients)) {
       const ingredientsArray = String(ingredients)

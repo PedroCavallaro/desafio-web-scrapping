@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { ScrapperService } from './services/scrapper.service';
 import { Bot } from '../bot/model/Bot';
-import { Filter } from '../filter/Filter';
-import { ProductDataParser } from '../parser/productDataParser.service';
+import { FilterService } from '../filter/Filter.service';
+import { ProductDataParserService } from '../parser/productDataParser.service';
 import { ScrapperController } from './scrapper.controller';
 
 @Module({
@@ -16,19 +16,23 @@ import { ScrapperController } from './scrapper.controller';
       },
     },
     {
-      provide: Filter,
-      useValue: new Filter(),
+      provide: FilterService,
+      useValue: new FilterService(),
     },
     {
-      provide: ProductDataParser,
-      useValue: new ProductDataParser(),
+      provide: ProductDataParserService,
+      useValue: new ProductDataParserService(),
     },
     {
       provide: ScrapperService,
-      useFactory: (bot: Bot, parser: ProductDataParser, filter: Filter) => {
+      useFactory: (
+        bot: Bot,
+        parser: ProductDataParserService,
+        filter: FilterService,
+      ) => {
         return new ScrapperService(bot, parser, filter);
       },
-      inject: [Bot, ProductDataParser, Filter],
+      inject: [Bot, ProductDataParserService, FilterService],
     },
   ],
 })

@@ -5,13 +5,12 @@ import { productAttributes } from 'src/helpers/contants/selectors';
 import { FilterProductsDTO } from 'src/helpers/dtos/FilterProductsDTO';
 import { IBot } from 'src/steps/bot/model/IBot';
 import { Filter } from 'src/steps/filter/Filter';
-import { IProductDataParser } from 'src/steps/parser/IProductDataParser';
-import { ProductDataParser } from 'src/steps/parser/productDataParser.service';
+import { ProductDataParser } from 'src/steps/parser/ProductDataParser';
 
 export class ScrapperService {
   private readonly URL: string;
   private readonly selectors: typeof productAttributes;
-  private readonly dataParser: IProductDataParser;
+  private readonly dataParser: ProductDataParser;
   private readonly filter: Filter;
   private page: Page;
 
