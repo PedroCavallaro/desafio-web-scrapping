@@ -158,6 +158,6 @@
 <ul>
   <li>Performance: quando começei a testar o código, percebi que estava levando cerca de 12 segundos para uma resposta, e que boa parte desse tempo era para o puppeter abrir. Para resolver isso decidi fazer um cache da mesma página, e aplicar a configuração  { waitUntil: 'domcontentloaded'}, desta forma o tempo da primeira requisição fica em torno de 5 segundos, e das próximas entre 1 a 2 segundos</li>
 </ul>
-
+<br>
 <h2>Error handling<h2>
 <p>Para lidar melhor com erros e repostas, utilizei a classe Result, com os metodos ok e fail</p>
