@@ -1,5 +1,5 @@
 <h1>Desafio Pedro Cavallaro</h1>
-<h4>Arquitetura</h4>
+<h1>Arquitetura</h1>
 <p>Para esse desafio, optei por uma arquitetura baseada em serviços, visto que ficaria mais adequado para lidar com as requisições. Também trabalhei bastante com desacoplamento e inversão de depência</p>
 
 <ul>
