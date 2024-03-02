@@ -15,7 +15,6 @@ import {
   NutritionLevel,
 } from 'src/helpers/contants/nutritionLevelMap';
 import { ProductDataParser } from './ProductDataParser';
-import { Product } from '../scrapper/model/Product';
 import { Nutrition } from '../scrapper/model/Nutrition';
 
 export class ProductDataParserService implements ProductDataParser {
@@ -55,12 +54,18 @@ export class ProductDataParserService implements ProductDataParser {
     const novaScore = this.getKeyByValue(novaScoreMap, novaTitle);
     const nutriScore = this.getKeyByValue(nutriScoreMap, nutriTitle);
 
-    return new Product(
+    return {
       id,
       name,
-      { score: novaScore, title: novaTitle },
-      { score: nutriScore, title: nutriTitle },
-    );
+      nutrition: {
+        score: nutriScore,
+        title: nutriTitle,
+      },
+      nova: {
+        score: novaScore,
+        title: novaTitle,
+      },
+    };
   }
   getKeyByValue<T>(object: T, value: string) {
     return Object.keys(object).find((key) => object[key] === value);
@@ -135,8 +140,8 @@ export class ProductDataParserService implements ProductDataParser {
       const perServing = $(e).children('td:nth-child(3)').text().trim();
 
       mappedData.set(item, {
-        per100g: this.hasValue(per100g) as string,
-        perServing: this.hasValue(perServing) as string,
+        per100g: per100g as string,
+        perServing: perServing as string,
       });
     });
 

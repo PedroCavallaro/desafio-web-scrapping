@@ -1,12 +1,25 @@
 import cheerio from 'cheerio';
-import { Product } from '../scrapper/model/Product';
 import { Classification } from '../scrapper/model/Classification';
 import { Nutrition } from '../scrapper/model/Nutrition';
 import { Ingredients } from '../scrapper/model/Ingredients';
 export interface ProductDataParser {
   formatIngredients(ingredients: string): string[] | 'Dado não encontrado';
 
-  mapProductCardArray($: cheerio.Root, e: cheerio.Element): Product;
+  mapProductCardArray(
+    $: cheerio.Root,
+    e: cheerio.Element,
+  ): {
+    id: string;
+    name: string;
+    nutrition: {
+      score: string;
+      title: string;
+    };
+    nova: {
+      score: string;
+      title: string;
+    };
+  };
 
   getKeyByValue<T>(object: T, value: string): string;
 

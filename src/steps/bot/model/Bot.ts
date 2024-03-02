@@ -10,11 +10,6 @@ class Bot implements IBot {
   async launch(): Promise<Page> {
     const browser = await this.pup.launch({
       headless: true,
-
-      executablePath:
-        process.env.CONTAINER == 'true'
-          ? process.env.CONTAINER
-          : this.pup.executablePath(),
     });
     const page = browser.newPage();
 
