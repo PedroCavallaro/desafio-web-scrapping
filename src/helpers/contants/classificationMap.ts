@@ -6,7 +6,7 @@ export const nutriScoreMapByText = {
   'Má qualidade nutricional': 'E',
   'Faltam dados para calcular o Nutri-Score': 'Dado não encontrado',
 };
-export type NutritionClassfication = keyof typeof nutriScoreMapByText;
+export type NutritionText = keyof typeof nutriScoreMapByText;
 
 export const nutriScoreMap = {
   A: 'Qualidade nutricional muito boa',
@@ -15,6 +15,7 @@ export const nutriScoreMap = {
   D: 'Qualidade nutricional baixa',
   E: 'Má qualidade nutricional',
 };
+export type NutritionClassification = keyof typeof nutriScoreMap;
 
 export const novaScoreMapByText = {
   'Alimentos não processados ​​ou minimamente processados': '1',
@@ -23,6 +24,7 @@ export const novaScoreMapByText = {
   'Alimentos ultra-processados': '4',
   'Nível desconhecido de processamento do alimento': 'Dado não encontrado',
 };
+export type NovaText = keyof typeof nutriScoreMapByText;
 
 export const novaScoreMap = {
   '1': 'Alimentos não processados ​​ou minimamente processados',
@@ -30,3 +32,4 @@ export const novaScoreMap = {
   '3': 'Ingredientes culinários processados',
   '4': 'Alimentos ultra-processados',
 };
+export type NovaClassification = keyof typeof nutriScoreMap;

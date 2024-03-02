@@ -20,9 +20,11 @@
     "test:e2e": "jest --config ./test/jest-e2e.json"
   },
   "dependencies": {
+    "@fastify/static": "^7.0.1",
     "@nestjs/common": "^10.0.0",
     "@nestjs/core": "^10.0.0",
     "@nestjs/platform-express": "^10.0.0",
+    "@nestjs/platform-fastify": "^10.3.3",
     "@nestjs/swagger": "^7.3.0",
     "cheerio": "^1.0.0-rc.12",
     "puppeteer": "^22.3.0",

@@ -15,7 +15,7 @@ export class DataParser {
   formatIngredients = (ingredients: string) => {
     if (this.hasValue(ingredients)) {
       const ingredientsArray = String(ingredients)
-        .replace(/\s*[:;,]\s*/g, ',')
+        .replace(/<\s*[:;,]\s*/g, ',')
         .split('\n');
 
       return ingredientsArray

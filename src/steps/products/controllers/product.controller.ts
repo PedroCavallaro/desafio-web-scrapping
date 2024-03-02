@@ -1,8 +1,9 @@
 import { Controller, Get, Inject, Param, Query } from '@nestjs/common';
 import { ProductService } from '../services/product.service';
 import { FilterProductsDTO } from 'src/@core/dtos/FilterProductsDTO';
-import { ApiQuery } from '@nestjs/swagger';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Produtos')
 @Controller('products')
 export class ProductController {
   @Inject(ProductService)

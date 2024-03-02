@@ -12,11 +12,9 @@ export class ProductService {
   private readonly selectors: typeof productAttributes;
   private readonly dataParser: DataParser;
   private readonly filter: Filter;
-  private readonly bot: IBot;
   private page: Page;
 
   constructor(bot: IBot, parser: DataParser, filter: Filter) {
-    this.bot = bot;
     this.URL = 'https://br.openfoodfacts.org/';
     this.selectors = productAttributes;
     this.dataParser = parser;
@@ -25,6 +23,9 @@ export class ProductService {
   }
 
   async getProductsByScore({ nova, nutrition }: FilterProductsDTO) {
+    console.log(
+      `Filtrando produtos por Nova:${nova} e Nutri-Score:${nutrition}`,
+    );
     await this.page.goto(this.URL);
     const html = await this.page.evaluate(
       () => document.documentElement.innerHTML,
@@ -38,7 +39,6 @@ export class ProductService {
       }, $)
       .map((e) => this.dataParser.mapProductCardArray($, e));
 
-    // this.page.close();
     return filter;
   }
 
@@ -51,7 +51,6 @@ export class ProductService {
 
     const product = await this.getProduct();
 
-    // this.page.close();
     return product;
   }
 
