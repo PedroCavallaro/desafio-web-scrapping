@@ -12,6 +12,7 @@ export class ScrapperController {
 
   @Get('/:id')
   async getProductById(@Param('id') id: string, @Res() res: Response) {
+    console.log('first');
     const product = await this.scrapper.getProductById(id);
     if (product.error) {
       return res.status(400).json({ error: true, message: product.error });

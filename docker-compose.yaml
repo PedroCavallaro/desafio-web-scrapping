@@ -4,6 +4,8 @@ services:
     build: .
     expose:
       - 3001
+    environment:
+      - CONTAINER=true
 networks:
   default:
     driver: bridge

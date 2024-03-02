@@ -10,9 +10,11 @@ class Bot implements IBot {
   async launch(): Promise<Page> {
     const browser = await this.pup.launch({
       headless: true,
-      // slowMo: 25,
-      // args: ['--start-maximized', '--no-sandbox'],
-      // executablePath: '/opt/google/chrome/google-chrome',
+
+      executablePath:
+        process.env.CONTAINER == 'true'
+          ? process.env.CONTAINER
+          : this.pup.executablePath(),
     });
     const page = browser.newPage();
 
