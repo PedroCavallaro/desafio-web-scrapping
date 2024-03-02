@@ -1,5 +1,24 @@
 <h1>Desafio Pedro Cavallaro</h1>
 <h1>Arquitetura</h1>
+
+<h1>Como rodar</h1>
+
+```
+npm run prod
+````
+
+<h1>Requisições</h1>
+<p>Utilizar a url sempre com aspas duplas</p>
+<h5>Um produto</h5>
+
+```
+curl --location "http://localhost:3000/products/3046920010603"
+```
+<h5>Filtro</h5>
+
+```
+ curl --location "http://localhost:3000/products?nutrition=A&nova=1"
+```
 <p>Para esse desafio, optei por uma arquitetura baseada em serviços, visto que ficaria mais adequado para lidar com as requisições. Também trabalhei bastante com desacoplamento e inversão de depência</p>
 
 <ul>
