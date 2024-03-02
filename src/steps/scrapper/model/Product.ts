@@ -1,30 +1,26 @@
 import { Ingredients } from './Ingredients';
 import { Classification } from './Classification';
 import { Nutrition } from './Nutrition';
-import {
-  NovaClassification,
-  NutritionClassification,
-} from 'src/helpers/contants/classificationMap';
 
 export class Product {
   id?: string;
   name: string;
-  nova: Classification<NovaClassification>;
-  nutri: Classification<NutritionClassification>;
+  nova: Classification;
+  nutri: Classification;
   ingredients?: Ingredients;
   servingSize?: string;
-  data: {
+  data?: {
     [key: string]: Nutrition;
   };
 
   constructor(
     id: string,
     name: string,
-    nova: Classification<NovaClassification>,
-    nutri: Classification<NutritionClassification>,
-    servingSize: string,
-    ingredients: Ingredients,
-    data: { [key: string]: Nutrition },
+    nova: Classification,
+    nutri: Classification,
+    servingSize?: string,
+    ingredients?: Ingredients,
+    data?: { [key: string]: Nutrition },
   ) {
     this.id = id;
     this.name = name;

@@ -1,5 +1,5 @@
-export class Classification<T> {
-  score: keyof T;
-  tile?: keyof T;
+export class Classification {
+  score: string;
+  title?: string;
   values?: Array<Array<string>>;
 }

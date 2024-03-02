@@ -15,6 +15,7 @@ import {
   NutritionLevel,
 } from 'src/helpers/contants/nutritionLevelMap';
 import { ProductDataParser } from './ProductDataParser';
+import { Product } from '../scrapper/model/Product';
 
 export class ProductDataParserService implements ProductDataParser {
   formatIngredients(ingredients: string) {
@@ -53,18 +54,12 @@ export class ProductDataParserService implements ProductDataParser {
     const novaScore = this.getKeyByValue(novaScoreMap, novaTitle);
     const nutriScore = this.getKeyByValue(nutriScoreMap, nutriTitle);
 
-    return {
+    return new Product(
       id,
       name,
-      nutrition: {
-        score: nutriScore,
-        title: nutriTitle,
-      },
-      nova: {
-        score: novaScore,
-        title: novaTitle,
-      },
-    };
+      { score: novaScore, title: novaTitle },
+      { score: nutriScore, title: nutriTitle },
+    );
   }
   getKeyByValue<T>(object: T, value: string) {
     return Object.keys(object).find((key) => object[key] === value);
